@@ -13,6 +13,7 @@ from .models import (
 
 # from .exceptions import G2GCrwlAPIErrors
 from ..logger import logger
+from ..decorators import retry_on_fail
 
 CRWL_G2G_API_BASE_URL: Final[str] = "https://sls.g2g.com"
 G2G_API_VERSION: Final[str] = "v2"
@@ -24,6 +25,7 @@ class CrwlG2GAPI:
         self.base_url = CRWL_G2G_API_BASE_URL
         self.version = G2G_API_VERSION
 
+    @retry_on_fail()
     def get_categories(self) -> Response[Category]:
         res = self.client.get(f"{self.base_url}/offer/category")
 
@@ -35,6 +37,7 @@ class CrwlG2GAPI:
 
         return Response[Category].model_validate(res.json())
 
+    @retry_on_fail()
     def get_brands(self, category_id: str) -> Response[Brand]:
         res = self.client.get(
             f"{self.base_url}/{self.version}/offer/category/{category_id}/brands"
@@ -47,6 +50,7 @@ class CrwlG2GAPI:
 
         return Response[Brand].model_validate(res.json())
 
+    @retry_on_fail()
     def get_keywords(
         self,
     ) -> KeywordDict:
@@ -59,6 +63,7 @@ class CrwlG2GAPI:
 
         return KeywordDict.model_validate(res.json())
 
+    @retry_on_fail()
     def get_category_json(
         self,
     ) -> CategoryJson:
@@ -71,6 +76,7 @@ class CrwlG2GAPI:
 
         return CategoryJson.model_validate(res.json())
 
+    @retry_on_fail()
     def get_keyword_relation(
         self,
         relation_id: str | None = None,
@@ -101,6 +107,7 @@ class CrwlG2GAPI:
 
         return Response[KeywordRelation].model_validate(res.json())
 
+    @retry_on_fail()
     def get_collections(
         self,
         service_id: str | None = None,
@@ -129,6 +136,7 @@ class CrwlG2GAPI:
 
         return Response[Collection].model_validate(res.json())
 
+    @retry_on_fail()
     def get_product_settings(self, service_id: str, brand_id: str):
         res = self.client.get(
             f"https://sls.g2g.com/offer/product_settings/service/{service_id}/brand/{brand_id}/product_settings"
