@@ -8,3 +8,20 @@ wheels/
 
 # venv
 .venv
+
+# logs
+**/logs/*
+!**/logs/.gitkeep
+
+# keys
+keys.json
+
+# Setting.envs
+setting.env
+
+# Downloaded_files
+downloaded_files/
+
+# Data
+data/*
+!data/.gitkeep
